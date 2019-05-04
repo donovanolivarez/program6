@@ -4,7 +4,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <stdlib.h>
-#include "cs2123p5.h"
+#include "cs2123p6.h"
 
 /******************** getToken **************************************
 char * getToken (char *pszInputTxt, char szToken[], int iTokenSize)
@@ -270,7 +270,7 @@ void readInput(Graph G){
             char szApt[5];
             int iScanCnt = sscanf(pszRemainingTxt, "%s", szApt);
             if (iScanCnt != 1){
-                printf("Expected airport!\n")
+                printf("Expected airport!\n");
             } else{
                 int iAirportIndex = findAirport(G, szApt);
                 if(iAirportIndex == -1) {

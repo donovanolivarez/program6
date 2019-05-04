@@ -4,6 +4,10 @@
 
 void prtAlts(Graph graph, int iOriginVertex, int iDestVertex)
 {
+	altPath->iAltCnt = 0
+	Vertex start = graph->vertexM[iOriginVertex];
+	Verted end = graph->vertexM[iDestVertex];
+
     // do stuff
 }
 int maxStepsChron(Graph graph, int iVertex, int iDestVertex, int iPrevArrTm2400)
