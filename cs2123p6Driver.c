@@ -70,6 +70,17 @@ char * getToken (char *pszInputTxt, char szToken[], int iTokenSize)
     else
         return pszInputTxt + 1;
 }
+
+AltPath altPath;
+AltPath newAltPath()
+{
+    AltPath ap = (AltPath) malloc (sizeof(AltPathImp));
+    if (ap == NULL)
+        errExit("could not allcate AltPath");
+    ap->iAltCnt = 0;
+    return ap;
+}
+
 /******************** errExit **************************************
     void errExit(char szFmt[], ... )
 Purpose:
@@ -287,6 +298,7 @@ Notes:
     Works well, short and sweet.
 **************************************************************************/
 int main(int argc, char** argv) {
+    altPath = newAltPath();
     Graph g = newGraph();
     readInput(g);
     freeGraph(g);
