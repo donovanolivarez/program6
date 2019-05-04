@@ -225,11 +225,17 @@ void readInput(Graph G){
             int iScanCnt = sscanf(pszRemainingTxt, "%s", szApt);
 
             if(iScanCnt != 1){
-                errExit("Expected airport!");
+                printf("Error: Expected airport!");
+            } else {
+                int iAirportIndex = findAirport(G, szApt);
+                if(iAirportIndex != -1) {
+                    prtTraversal(G, iAirportIndex, 0);
+                    setNotVisited(G);
+                } else {
+                    printf(WARN_Specified_Airport_Not_Found, szApt);
+                }
             }
-            int iAirportIndex = findAirport(G, szApt);
-            prtTraversal(G, iAirportIndex, 0);
-            setNotVisited(G);
+            
             
         }else if(strcmp(token, "PRTCHRON") == 0) {
             
@@ -237,13 +243,31 @@ void readInput(Graph G){
             int iScanCnt = sscanf(pszRemainingTxt, "%s", szApt);
 
             if(iScanCnt != 1){
-                errExit("Expected airport!");
+                printf("Error: Expected airport!\n");
+            } else {
+                int iAirportIndex = findAirport(G, szApt);
+                if (iAirportIndex == -1) {
+                    printf(WARN_Specified_Airport_Not_Found, szApt);
+                } else {
+                    int iIndent = 0;
+                    int iPrevArrTm2400 = 0;
+                    prtTraversalChron(G, iAirportIndex, iIndent,iPrevArrTm2400 );
+                    setNotVisited(G);
+                }
             }
-            int iAirportIndex = findAirport(G, szApt);
-            int iIndent = 0;
-            int iPrevArrTm2400 = 0;
-            prtTraversalChron(G, iAirportIndex, iIndent,iPrevArrTm2400 );
-            setNotVisited(G);
+        }else if(strcmp(token, "DELETE") == 0) {
+            char szApt[5];
+            int iScanCnt = sscanf(pszRemainingTxt, "%s", szApt);
+            if (iScanCnt != 1){
+                printf("Expected airport!\n")
+            } else{
+                int iAirportIndex = findAirport(G, szApt);
+                if(iAirportIndex == -1) {
+                    printf(WARN_Specified_Airport_Not_Found, szApt);
+                } else {
+                    deleteAirport(G, szApt);
+                }
+            }
         }
     }
 }
