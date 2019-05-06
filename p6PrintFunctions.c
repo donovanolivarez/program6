@@ -317,6 +317,7 @@ int prtPredecessors(Graph g, int iVertex)
     char szAirport[MAX_TOKEN];
     EdgeNode *p;
     int i = 0;
+    int iV;
     
     // copy the airport only once.
     strcpy(szAirport, g->vertexM[iVertex].szAirport);
@@ -327,19 +328,23 @@ int prtPredecessors(Graph g, int iVertex)
 
     for (p = g->vertexM[iVertex].predecessorList; p != NULL; p = p->pNextEdge)
     {
-        iV = findAirport(g, p->flight.szOrigin);
-        if (g->vertexM[iV].bExists == FALSE) 
-            continue;
-        else if (strcmp(p->flight.szOrigin, g->vertexM[iVertex].szAirport) == 0)
-            continue;
+        iV = findAirport(g, p->flight.szDest);
+
+        if (g->vertexM[iV].bExists == TRUE)
+        {
      
-        // update, should be different each time.
-        strcpy(szOrigin,p->flight.szOrigin);
-        strcpy(szFlightNr, p->flight.szFlightNr);
-        printf("%-s/%s ", szFlightNr, szOrigin);
-        i++;
+            // update, should be different each time.
+            strcpy(szOrigin,p->flight.szOrigin);
+            strcpy(szFlightNr, p->flight.szFlightNr);
+            printf("%-s/%s ", szFlightNr, szOrigin);
+            i++;
+        }
+        else if (strcmp(p->flight.szOrigin, g->vertexM[iV].szAirport) == 0)
+            continue;
      }
-     return i;
+        
+    
+    return i;
 }
 
 /********************** prtSuccessors *************************
