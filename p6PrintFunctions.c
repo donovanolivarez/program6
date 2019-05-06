@@ -181,16 +181,18 @@ void prtOne(Graph graph, int iVertex)
     // total number of dot patterns according to example output.
     int totalDots = 8;
     
-    iPredCnt = prtPredecessors(graph, iVertex);
-    totalDots = totalDots - iPredCnt;
-    prtDots(totalDots);
-    
-    // if no successors, print out 1 pattern of dots.
-    iSuccessorCnt = prtSuccessors(graph, iVertex);
-    if (iSuccessorCnt == 0)
+    if (graph->vertexM[iVertex].bExists != FALSE)
+    {
+        iPredCnt = prtPredecessors(graph, iVertex);
+        totalDots = totalDots - iPredCnt;
+        prtDots(totalDots);
+        
+        // if no successors, print out 1 pattern of dots.
+        iSuccessorCnt = prtSuccessors(graph, iVertex);
+        if (iSuccessorCnt == 0)
         prtDots(1);
-
-    printf("\n");
+        printf("\n");
+    }
 }
 
 
