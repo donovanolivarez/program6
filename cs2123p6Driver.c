@@ -245,6 +245,24 @@ void readInput(Graph G){
             prtTraversalChron(G, iAirportIndex, iIndent,iPrevArrTm2400 );
             setNotVisited(G);
         }
+        else if(strcmp(token, "DELETE") == 0)
+        {
+            char szApt[5];
+            int iScanCnt = sscanf(pszRemainingTxt, "%s", szApt);
+            int iAirportIndex = findAirport(G, szApt);
+            if(iScanCnt != 1)
+            {
+                errExit("Expected airport!");
+            }
+            else if (G->vertexM[iAirportIndex].bExists == FALSE)
+            {
+                printf(WARN_Specified_Airport_Not_Found, szApt);
+            }  
+            else
+            {
+                deleteAirport(G, szApt);
+            }
+        }
     }
 }
 
