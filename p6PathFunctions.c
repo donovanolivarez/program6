@@ -54,9 +54,53 @@ void prtAlts(Graph graph, int iOriginVertex, int iDestVertex)
     // do stuff
 }
 
+/*********************** maxStepsChron ***************************
+ 
+ Purpose:
+    finds the maximum number of steps in a path.
+ Parameters:
+    I/O    Graph graph - graph of the airports as a double adjacency list.
+    I      int iVertex  - origin vertex/ successor vertex in subsequent calls.
+    I      int iDestVertex - destination of the vertex we are searching for.
+    I      int iPrevArrTm2400  -   previous arrival time.
+ Returns:
+    1. returns 1 if the destination vertex is a valid successor.
+    2. returns 0 if the vertex has been visited or a path is found.
+ Notes:
+    function is recursive, setNotVisited(graph) is used after calling to reset bVisited.
+ 
+ *****************************************************************/
 int maxStepsChron(Graph graph, int iVertex, int iDestVertex, int iPrevArrTm2400)
 {
-    // do stuff 
+    
+    if (graph->vertexM[iVertex].bVisited == TRUE)
+        return 0;
+    graph->vertexM[iVertex].bVisited = TRUE;
+    
+    if (iVertex == iDestVertex)
+    {
+        return 0;
+    }
+        
+    
+    int iSteps = 0;
+    int iMax = 0;
+    EdgeNode *e;
+    for (e = graph->vertexM[iVertex].successorList; e != NULL; e = e->pNextEdge)
+    {
+        //if valid
+        if (e->flight.iDepTm2400 > (iPrevArrTm2400 + SAFE_DELTA_BETWEEN_FLIGHTS))
+        {
+            int nextArrival = calcArr2400(e->flight.iDepTm2400, e->flight.iDurationMins, e->flight.iZoneChange);
+            iSteps = 1 + maxStepsChron(graph, e->iDestVertex, iDestVertex, nextArrival);
+        }
+ 
+        if (iMax < iSteps)
+            iMax = iSteps;
+        
+        graph->vertexM[iVertex].bVisited = FALSE;
+    }
+    return iMax;
 }
 
 /******************** determinePaths **************************************
