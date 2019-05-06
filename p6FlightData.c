@@ -249,25 +249,31 @@ void deleteAirport (Graph graph, char szAirport[])
     // Goal: Delete airport
     // Need to free all edges to and from the airport (vertex)
     // Mark airport as deleted in the vertex array (update bExists)
-    EdgeNode *e;
-    int iVertex;
-    
-    // Traverse through graph to find the correct airport
+    EdgeNode *e, *p;
+    int iVertex, iV;
+   
     iVertex = findAirport(graph, szAirport);
     graph->vertexM[iVertex].bExists = FALSE;
-            
-            // Free edges that have this airport as a predecessor
-            for (e = graph->vertexM[iVertex].successorList; e != NULL; e = e->pNextEdge)
+      
+    for (iV = 0; iV < graph->iNumVertices; iV++)
+    {
+        for (e = graph->vertexM[iV].successorList; e != NULL; e = e->pNextEdge)
+        {
+            if (strcmp(szAirport, e->flight.szOrigin) == 0)
             {
+                //graph->vertexM[p->iOriginVertex].bExists = FALSE;
                 removeLL(e);
             }
-            
-            // Free edges that have this airport as a successor
-            for (e = graph->vertexM[iVertex].predecessorList; e != NULL; e = e->pNextEdge)
+        }
+    
+        for (e = graph->vertexM[iV].predecessorList; e != NULL; e = e->pNextEdge)
+        {
+            if (strcmp(szAirport, e->flight.szDest) == 0)
             {
+                //graph->vertexM[p->iDestVertex].bExists = FALSE;
                 removeLL(e);
             }
-        }      
+        }
     }
 }
 
