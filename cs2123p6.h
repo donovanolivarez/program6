@@ -130,6 +130,9 @@ void setNotVisited(Graph graph);
 void prtFlightsByOrigin(Graph graph);
 void prtFlightsByDest(Graph graph);
 Graph newGraph();
+int prtPredecessors(Graph g, int iVertex);
+int prtSuccessors(Graph g, int iVertex);
+void prtDots(int iCount);
 
 // Program 6 recursive
 int maxStepsChron(Graph graph, int iVertex, int iDestVertex, int iPrevArrTm2400);
@@ -150,3 +153,6 @@ void printChain(Graph g, int iVertex);
 void errExit(char szFmt[], ...);
 char * getToken(char *pszInputTxt, char szToken[], int iTokenSize);
 
+EdgeNode * insertOrderedLL(EdgeNode **list, Flight flight, int iOrigin, int iDest);
+EdgeNode *searchLL(EdgeNode *list, char flightNr[], EdgeNode **ppPrecedes);
+EdgeNode *allocNodeLL(EdgeNode *list, Flight flight);
