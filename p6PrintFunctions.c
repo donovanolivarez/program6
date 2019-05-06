@@ -190,7 +190,9 @@ void prtOne(Graph graph, int iVertex)
         // if no successors, print out 1 pattern of dots.
         iSuccessorCnt = prtSuccessors(graph, iVertex);
         if (iSuccessorCnt == 0)
-        prtDots(1);
+        {
+            prtDots(1);
+        }
         printf("\n");
     }
 }
