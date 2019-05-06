@@ -181,16 +181,20 @@ void prtOne(Graph graph, int iVertex)
     // total number of dot patterns according to example output.
     int totalDots = 8;
     
-    iPredCnt = prtPredecessors(graph, iVertex);
-    totalDots = totalDots - iPredCnt;
-    prtDots(totalDots);
-    
-    // if no successors, print out 1 pattern of dots.
-    iSuccessorCnt = prtSuccessors(graph, iVertex);
-    if (iSuccessorCnt == 0)
-        prtDots(1);
-
-    printf("\n");
+    if (graph->vertexM[iVertex].bExists != FALSE)
+    {
+        iPredCnt = prtPredecessors(graph, iVertex);
+        totalDots = totalDots - iPredCnt;
+        prtDots(totalDots);
+        
+        // if no successors, print out 1 pattern of dots.
+        iSuccessorCnt = prtSuccessors(graph, iVertex);
+        if (iSuccessorCnt == 0)
+        {
+            prtDots(1);
+        }
+        printf("\n");
+    }
 }
 
 
@@ -313,19 +317,33 @@ int prtPredecessors(Graph g, int iVertex)
     char szAirport[MAX_TOKEN];
     EdgeNode *p;
     int i = 0;
+    int iV;
     
     // copy the airport only once.
     strcpy(szAirport, g->vertexM[iVertex].szAirport);
-    
-    printf("%d %s ", iVertex, szAirport);
+    if (g->vertexM[iVertex].bExists != FALSE)
+    {
+        printf("%d %s ", iVertex, szAirport);
+    }
+
     for (p = g->vertexM[iVertex].predecessorList; p != NULL; p = p->pNextEdge)
     {
-        // update, should be different each time.
-        strcpy(szOrigin,p->flight.szOrigin);
-        strcpy(szFlightNr, p->flight.szFlightNr);
-        printf("%-s/%s ", szFlightNr, szOrigin);
-        i++;
-    }
+        iV = findAirport(g, p->flight.szDest);
+
+        if (g->vertexM[iV].bExists == TRUE)
+        {
+     
+            // update, should be different each time.
+            strcpy(szOrigin,p->flight.szOrigin);
+            strcpy(szFlightNr, p->flight.szFlightNr);
+            printf("%-s/%s ", szFlightNr, szOrigin);
+            i++;
+        }
+        else if (strcmp(p->flight.szOrigin, g->vertexM[iV].szAirport) == 0)
+            continue;
+     }
+        
+    
     return i;
 }
 
@@ -349,18 +367,25 @@ int prtSuccessors(Graph g, int iVertex)
     char szAirport[MAX_TOKEN];
     EdgeNode *p;
     int i = 0;
+    int iV;
     
     // copy the airport only once.
     strcpy(szAirport, g->vertexM[iVertex].szAirport);
     
-    //printf("%d %s ", iVertex, szAirport);
     for (p = g->vertexM[iVertex].successorList; p != NULL; p = p->pNextEdge)
     {
-        // update, should be different each time.
-        strcpy(szDest,p->flight.szDest);
-        strcpy(szFlightNr, p->flight.szFlightNr);
-        printf("%-s-%s ", szFlightNr, szDest);
-        i++;
+        iV = findAirport(g, p->flight.szDest);
+
+        if (g->vertexM[iV].bExists == TRUE)
+        {
+            // update, should be different each time.
+            strcpy(szDest,p->flight.szDest);
+            strcpy(szFlightNr, p->flight.szFlightNr);
+            printf("%-s-%s ", szFlightNr, szDest);
+            i++;
+        }
+        else
+            continue;
     }
     return i;
 }

@@ -231,5 +231,49 @@ int removeLL(EdgeNode *list )
     return TRUE;
 }
 
- 
+/******************** deleteAirport *******************
+void deleteAirport (Graph graph, char szAirport[])
+ Purpose:
+ *  Deletes an airport based on szAirport
+ Parameters:
+ *  I/O Graph graph     - pointer to a graph
+ *  I   char sAirport   - name of airport to be deleted
+ Returns:
+ *  N/A
+ Notes:
+ *  1. All edge nodes that reference the deleted airport
+ *     are freed.
+ *****************************************************/
+void deleteAirport (Graph graph, char szAirport[])
+{
+    // Goal: Delete airport
+    // Need to free all edges to and from the airport (vertex)
+    // Mark airport as deleted in the vertex array (update bExists)
+    EdgeNode *e, *p;
+    int iVertex, iV;
+   
+    iVertex = findAirport(graph, szAirport);
+    graph->vertexM[iVertex].bExists = FALSE;
+      
+    for (iV = 0; iV < graph->iNumVertices; iV++)
+    {
+        for (e = graph->vertexM[iV].successorList; e != NULL; e = e->pNextEdge)
+        {
+            if (strcmp(szAirport, e->flight.szOrigin) == 0)
+            {
+                //graph->vertexM[p->iOriginVertex].bExists = FALSE;
+                removeLL(e);
+            }
+        }
+    
+        for (e = graph->vertexM[iV].predecessorList; e != NULL; e = e->pNextEdge)
+        {
+            if (strcmp(szAirport, e->flight.szDest) == 0)
+            {
+                //graph->vertexM[p->iDestVertex].bExists = FALSE;
+                removeLL(e);
+            }
+        }
+    }
+}
 
