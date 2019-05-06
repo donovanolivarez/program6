@@ -76,7 +76,7 @@ AltPath newAltPath()
 {
     AltPath ap = (AltPath) malloc (sizeof(AltPathImp));
     if (ap == NULL)
-        errExit("could not allcate AltPath");
+        errExit("could not allocate AltPath");
     ap->iAltCnt = 0;
     return ap;
 }
@@ -276,9 +276,43 @@ void readInput(Graph G){
                 if(iAirportIndex == -1) {
                     printf(WARN_Specified_Airport_Not_Found, szApt);
                 } else {
-                    deleteAirport(G, szApt);
+                    //deleteAirport(G, szApt);
                 }
             }
+        }else if(strcmp(token, "PRTALTS") == 0) {
+            char szOrigin[5];
+            char szDest[5];
+            int iScanCnt = sscanf(pszRemainingTxt, "%s %s", szOrigin, szDest);
+            if(iScanCnt != 2) {
+                printf("PRTALTS expects two airports\n");
+            } else {
+                if (findAirport(G, szOrigin) == -1){
+                    printf(WARN_Specified_Airport_Not_Found, szOrigin);
+                } else {
+                    if (findAirport(G,szDest) == -1) {
+                        printf(WARN_Specified_Airport_Not_Found, szDest);
+                    } else {
+                        prtAlts(G, findAirport(G, szOrigin), findAirport(G,szDest));
+                    }
+                }
+            }
+        }else if(strcmp(token, "MAXSTEPS") == 0) {
+            char szOriginApt[5];
+            char szDestApt[5];
+            
+            int iScanCnt = sscanf(pszRemainingTxt,"%s %s", szOriginApt, szDestApt);
+            
+            if(iScanCnt != 2){
+                errExit("Expected airport!");
+            }
+            int iOriginVertex = findAirport(G, szOriginApt);
+            int iDestVertex = findAirport(G, szDestApt);
+            int iPrevArrival2400 = 0;
+            int iMaxSteps;
+            setNotVisited(G);
+            iMaxSteps = maxStepsChron(G, iOriginVertex, iDestVertex, iPrevArrival2400);
+            setNotVisited(G);
+            printf("Maximum chain chron for %s to %s contains %d steps\n", szOriginApt, szDestApt, iMaxSteps);
         }
     }
 }
