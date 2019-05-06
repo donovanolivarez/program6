@@ -316,17 +316,26 @@ int prtPredecessors(Graph g, int iVertex)
     
     // copy the airport only once.
     strcpy(szAirport, g->vertexM[iVertex].szAirport);
-    
-    printf("%d %s ", iVertex, szAirport);
+    if (g->vertexM[iVertex].bExists != FALSE)
+    {
+        printf("%d %s ", iVertex, szAirport);
+    }
+
     for (p = g->vertexM[iVertex].predecessorList; p != NULL; p = p->pNextEdge)
     {
+        iV = findAirport(g, p->flight.szOrigin);
+        if (g->vertexM[iV].bExists == FALSE) 
+            continue;
+        else if (strcmp(p->flight.szOrigin, g->vertexM[iVertex].szAirport) == 0)
+            continue;
+     
         // update, should be different each time.
         strcpy(szOrigin,p->flight.szOrigin);
         strcpy(szFlightNr, p->flight.szFlightNr);
         printf("%-s/%s ", szFlightNr, szOrigin);
         i++;
-    }
-    return i;
+     }
+     return i;
 }
 
 /********************** prtSuccessors *************************
@@ -356,6 +365,16 @@ int prtSuccessors(Graph g, int iVertex)
     //printf("%d %s ", iVertex, szAirport);
     for (p = g->vertexM[iVertex].successorList; p != NULL; p = p->pNextEdge)
     {
+        iV = findAirport(g, p->flight.szDest);
+        if (g->vertexM[iV].bExists == FALSE)
+        {
+            continue;
+        }
+        else if (strcmp(p->flight.szDest, g->vertexM[iVertex].szAirport) == 0)
+        {
+            continue;
+        }
+        
         // update, should be different each time.
         strcpy(szDest,p->flight.szDest);
         strcpy(szFlightNr, p->flight.szFlightNr);
